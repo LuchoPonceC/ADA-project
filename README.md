@@ -1,4 +1,4 @@
-# Projecto - ADA
+# Proyecto - ADA
 | Nombre y Apellidos | codigo de alumno |
 |-|-|
 |Luis Ponce | 201620053 |
