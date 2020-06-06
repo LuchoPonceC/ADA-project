@@ -1,12 +1,17 @@
 #include <vector>
 #include <string>
+#include <algorithm>
+
+#define	DIVISION 1
+#define AGRUPACION 2
+
 
 #define TIPO_A 0
 #define TIPO_B 1
 #define TESTING 1
 
 
-typedef int dataType;
+typedef double dataType;
 
 using namespace std;
 
@@ -21,13 +26,15 @@ private:
 	dataType resultado;
 
 public:
-
+	
 	void set_resultado(dataType resultado);
 	void LlenarVectores(string dato, int tipo);
 	void MostrarVector(int tipo);
 	void LlenarWeights(int tipo);
 	void MostrarWeights(int tipo);
 	dataType get_resultado();
+	dataType minimo(dataType a, dataType b, dataType c);
+
 
 
 	//FUNCIONES VORAZ :
@@ -38,7 +45,7 @@ public:
 
 	//FUNCIONES RECURSIVO:
 	dataType Recursivo_func();		
-
+	dataType OPT(int i, int j, int tipo, dataType A1, dataType B1, int posicion);
 
 
 
@@ -59,17 +66,46 @@ public:
 dataType Secuencias::Voraz_func(){
 	return 0;
 }	
+
+
 dataType Secuencias::Recursivo_func(){
-
-	return 0;
-
-
-
+			
+	return min(OPT(0,0,DIVISION,A_weights[0],0,0),OPT(0,0,AGRUPACION,0,B_weights[0],0));
 
 }		
+
+dataType Secuencias::OPT(int i, int j, int tipo, dataType A1, dataType B1, int posicion){
+	if(TESTING){
+		//cout<<i<<" - "<<j<<" - "<<"TIPO "<<tipo<<endl;
+	}
+	if((i>=A_weights.size() || j>=B_weights.size()) && (posicion == -1 || posicion == 1)){return 0;}	
+	if(i>=A_weights.size() || j>=B_weights.size()){return 100000;}
+	if(tipo == DIVISION){
+		if(TESTING){
+			//cout<<i<<" - "<<j<<" ++ A1 "<<A1<<" - B1 "<<B1<<" - B_WEIGHTS "<<B_weights[j]<<" - RESULTADO -> "<<A1/(B_weights[j]+B1)<<endl;
+		}
+		return minimo(((A1/(B_weights[j]+B1))+OPT(i+1,j+1,DIVISION,A_weights[i+1],0,-1)),
+					OPT(i,j+1,DIVISION,A1,B_weights[j]+B1,0),
+					((A1/(B_weights[j]+B1))+OPT(i+1,j+1,AGRUPACION,0,B_weights[j+1],1)));
+	}
+	else{
+		if(TESTING){
+			//cout<<i<<" - "<<j<<" ++ A1 "<<A1<<" - B1 "<<B1<<" - B_WEIGHTS "<<B_weights[j]<<" - RESULTADO -> "<<A_weights[i]+A1/B1<<endl;
+		}
+		return minimo((((A_weights[i]+A1)/B1) + OPT(i+1,j+1,AGRUPACION, 0, B_weights[j+1],1)),
+			   		OPT(i+1,j,AGRUPACION,A1+A_weights[i],B1,0),
+					(((A_weights[i]+A1)/B1)+OPT(i+1,j+1,DIVISION,A_weights[i+1],0,-1)));	
+	}
+}
+
+
+
 dataType Secuencias::Memoizado_func(){
 	return 0;
 }		
+
+
+
 dataType Secuencias::Dinamico_func(){
 	return 0;
 }		
@@ -78,7 +114,9 @@ dataType Secuencias::Dinamico_func(){
 
 
 
-
+dataType Secuencias::minimo(dataType a, dataType b, dataType c){
+	return min(a,min(b,c));
+}
 
 void Secuencias::set_resultado(dataType resultado){
 	this->resultado = resultado;
@@ -113,7 +151,7 @@ void Secuencias::MostrarVector(int tipo){
 
 void Secuencias::MostrarWeights(int tipo){
 
-	vector<int> *current = (tipo == TIPO_A) ? &A_weights : &B_weights;
+	vector<dataType> *current = (tipo == TIPO_A) ? &A_weights : &B_weights;
 
 	for(int i=0;i<current->size();i++){
 		cout<<(*current)[i]<<" - ";
@@ -126,7 +164,8 @@ void Secuencias::LlenarWeights(int tipo){
 
 	bool esta_sumando = false;
 	int suma = 0;	
-	vector<dataType> *current, *current_vector;
+	vector<dataType> *current; 
+	vector<int> *current_vector;
 	if(tipo == TIPO_A){
 		current = &A_weights;
 		current_vector = &A_vector;

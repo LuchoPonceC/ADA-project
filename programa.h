@@ -1,7 +1,7 @@
 #include "secuencia.h"
 
-#define VORAZ 1
-#define RECURSIVO 0
+#define VORAZ 0
+#define RECURSIVO 1
 #define MEMOIZADO 0
 #define DINAMICO 0
 
