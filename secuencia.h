@@ -85,6 +85,9 @@ dataType Secuencias::OPT(int i, int j, int tipo, dataType A1, dataType B1){
 	}	
 	if(tipo == DIVISION){
 		if(i+1 == A_weights.size()){
+			if(B1!=0){
+				return 10000;
+			}
 			dataType sum_temp = 0;
 			for (int auxiliar = j; auxiliar<B_weights.size(); auxiliar++){
 				sum_temp += B_weights[auxiliar];
@@ -97,6 +100,9 @@ dataType Secuencias::OPT(int i, int j, int tipo, dataType A1, dataType B1){
 	}
 	else{
 		if(j+1 == B_weights.size()){
+			if(A1!=0){
+				return 10000;
+			}
 			dataType sum_temp = 0;
 			for (int auxiliar = i; auxiliar<A_weights.size(); auxiliar++){
 				sum_temp += A_weights[auxiliar];
