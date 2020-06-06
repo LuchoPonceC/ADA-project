@@ -75,23 +75,55 @@ dataType Secuencias::Recursivo_func(){
 }		
 
 dataType Secuencias::OPT(int i, int j, int tipo, dataType A1, dataType B1, int posicion){
-	if(TESTING){
-		//cout<<i<<" - "<<j<<" - "<<"TIPO "<<tipo<<endl;
-	}
-	if((i>=A_weights.size() || j>=B_weights.size()) && (posicion == -1 || posicion == 1)){return 0;}	
-	if(i>=A_weights.size() || j>=B_weights.size()){return 100000;}
+
+	/*if((i>=A_weights.size() || j>=B_weights.size()) && (posicion == -1 || posicion == 1)){
+		
+		return 0;
+	}*/	
+	if(i+1 == A_weights.size() && j+1 == B_weights.size() && posicion != 0){
+		return A_weights[i]/B_weights[j];	
+	}	
 	if(tipo == DIVISION){
-		if(TESTING){
-			//cout<<i<<" - "<<j<<" ++ A1 "<<A1<<" - B1 "<<B1<<" - B_WEIGHTS "<<B_weights[j]<<" - RESULTADO -> "<<A1/(B_weights[j]+B1)<<endl;
+		if(i+1 == A_weights.size()){
+			dataType sum_temp = 0;
+			for (int auxiliar = j; auxiliar<B_weights.size(); auxiliar++){
+				sum_temp += B_weights[auxiliar];
+			}		
+			return A1/(B1+sum_temp);
 		}
+		if(j+1 == B_weights.size()){
+			return 10000;	
+		}
+	}
+	else{
+		if(j+1 == B_weights.size()){
+			dataType sum_temp = 0;
+			for (int auxiliar = i; auxiliar<A_weights.size(); auxiliar++){
+				sum_temp += A_weights[auxiliar];
+			}		
+			return (A1+sum_temp)/B1;
+		}
+		if(i+1 == A_weights.size()){
+			return 10000;
+		}
+	}
+/*	
+	if(j>=B_weights.size() && (posicion == 1)){
+		if((A_weights.size()-i)!=0) return 100000;	
+		return 0;
+	}
+	if(i>=A_weights.size() && (posicion == -1)){
+		if((B_weights.size()-j)!=0) return 100000;	
+		return 0;
+	}	
+	if(i>=A_weights.size() || j>=B_weights.size()){return 100000;}
+	*/
+	if(tipo == DIVISION){
 		return minimo(((A1/(B_weights[j]+B1))+OPT(i+1,j+1,DIVISION,A_weights[i+1],0,-1)),
 					OPT(i,j+1,DIVISION,A1,B_weights[j]+B1,0),
 					((A1/(B_weights[j]+B1))+OPT(i+1,j+1,AGRUPACION,0,B_weights[j+1],1)));
 	}
 	else{
-		if(TESTING){
-			//cout<<i<<" - "<<j<<" ++ A1 "<<A1<<" - B1 "<<B1<<" - B_WEIGHTS "<<B_weights[j]<<" - RESULTADO -> "<<A_weights[i]+A1/B1<<endl;
-		}
 		return minimo((((A_weights[i]+A1)/B1) + OPT(i+1,j+1,AGRUPACION, 0, B_weights[j+1],1)),
 			   		OPT(i+1,j,AGRUPACION,A1+A_weights[i],B1,0),
 					(((A_weights[i]+A1)/B1)+OPT(i+1,j+1,DIVISION,A_weights[i+1],0,-1)));	
