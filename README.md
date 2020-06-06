@@ -8,7 +8,7 @@
 * Jonathan Hoyos
 
 ### Ejecutar proyecto
-  * En [Programa.h](programa.h) cambiar los **#define** (voraz, recursivo .....) de las funciones a **1** si se desean ejecutar
+  * En [Programa.h](programa.h) cambiar los **#define** (voraz, recursivo .....) de las funciones a **1** si se desean ejecutar, luego correr el siguiente comando: 
   
         ./run.sh
 
