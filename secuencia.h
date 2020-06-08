@@ -45,7 +45,7 @@ public:
 	//FUNCIONES RECURSIVO:
 	dataType Recursivo_func();		
 	dataType minimo(dataType a, dataType b, dataType c);
-	dataType OPT(int i, int j, int tipo, dataType A1, dataType B1);
+	dataType OPT(int i, int j, int tipo, dataType lleva);
 
 
 
@@ -70,69 +70,52 @@ dataType Secuencias::Voraz_func(){
 
 dataType Secuencias::Recursivo_func(){
 			
-	return min(OPT(0,0,DIVISION,A_weights[0],0),OPT(0,0,AGRUPACION,0,B_weights[0]));
+	return min(OPT(0,0,DIVISION,0),OPT(0,0,AGRUPACION,0));
 
 }		
 
-dataType Secuencias::OPT(int i, int j, int tipo, dataType A1, dataType B1){
+dataType Secuencias::OPT(int i, int j, int tipo, dataType lleva){
 
-	/*if((i>=A_weights.size() || j>=B_weights.size()) && (posicion == -1 || posicion == 1)){
-		
-		return 0;
-	}*/	
 	if(i+1 == A_weights.size() && j+1 == B_weights.size() ){
 		return A_weights[i]/B_weights[j];	
 	}	
 	if(tipo == DIVISION){
+		if(j+1 == B_weights.size()){
+			return 10000;	
+		}
 		if(i+1 == A_weights.size()){
-			if(B1!=0){
-				return 10000;
-			}
 			dataType sum_temp = 0;
 			for (int auxiliar = j; auxiliar<B_weights.size(); auxiliar++){
 				sum_temp += B_weights[auxiliar];
 			}		
-			return A1/(B1+sum_temp);
+			return A_weights[i]/(lleva+sum_temp);
 		}
-		if(j+1 == B_weights.size()){
-			return 10000;	
-		}
+		
 	}
 	else{
+		if(i+1 == A_weights.size()){
+			return 10000;
+		}
 		if(j+1 == B_weights.size()){
-			if(A1!=0){
-				return 10000;
-			}
+			
 			dataType sum_temp = 0;
 			for (int auxiliar = i; auxiliar<A_weights.size(); auxiliar++){
 				sum_temp += A_weights[auxiliar];
 			}		
-			return (A1+sum_temp)/B1;
+			return (lleva+sum_temp)/B_weights[j];
 		}
-		if(i+1 == A_weights.size()){
-			return 10000;
-		}
+		
 	}
-/*	
-	if(j>=B_weights.size() && (posicion == 1)){
-		if((A_weights.size()-i)!=0) return 100000;	
-		return 0;
-	}
-	if(i>=A_weights.size() && (posicion == -1)){
-		if((B_weights.size()-j)!=0) return 100000;	
-		return 0;
-	}	
-	if(i>=A_weights.size() || j>=B_weights.size()){return 100000;}
-	*/
+
 	if(tipo == DIVISION){
-		return minimo(((A1/(B_weights[j]+B1))+OPT(i+1,j+1,DIVISION,A_weights[i+1],0)),
-					OPT(i,j+1,DIVISION,A1,B_weights[j]+B1),
-					((A1/(B_weights[j]+B1))+OPT(i+1,j+1,AGRUPACION,0,B_weights[j+1])));
+		return minimo(((A_weights[i]/(B_weights[j]+lleva))+OPT(i+1,j+1,DIVISION,0)),
+					OPT(i,j+1,DIVISION,B_weights[j]+lleva),
+					((A_weights[i]/(B_weights[j]+lleva))+OPT(i+1,j+1,AGRUPACION,0)));
 	}
 	else{
-		return minimo((((A_weights[i]+A1)/B1) + OPT(i+1,j+1,AGRUPACION, 0, B_weights[j+1])),
-			   		OPT(i+1,j,AGRUPACION,A1+A_weights[i],B1),
-					(((A_weights[i]+A1)/B1)+OPT(i+1,j+1,DIVISION,A_weights[i+1],0)));	
+		return minimo((((A_weights[i]+lleva)/B_weights[j]) + OPT(i+1,j+1,AGRUPACION, 0)),
+			   		OPT(i+1,j,AGRUPACION,lleva+A_weights[i]),
+					(((A_weights[i]+lleva)/B_weights[j])+OPT(i+1,j+1,DIVISION,0)));	
 	}
 }
 
