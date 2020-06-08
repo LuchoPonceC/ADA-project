@@ -46,7 +46,7 @@ void Programa::Ejecutar(){
 		cout<<"El resultado es : "<<sec->get_resultado()<<endl;
 	}
 	if(DINAMICO){
-		cout<<"RECURSIVO"<<endl;
+		cout<<"DINAMICO"<<endl;
 		sec->set_resultado(sec->Dinamico_func());
 		cout<<"El resultado es : "<<sec->get_resultado()<<endl;
 	}
