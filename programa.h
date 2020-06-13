@@ -61,9 +61,9 @@ void Programa::RellenarDatos(){
 	sec->LlenarVectores(temporal,TIPO_B);	
 	if(TESTING){
 
-		sec->MostrarWeights(TIPO_A);
+		sec->MostrarPesos(TIPO_A);
 		//sec->MostrarWeightsAcumulado(TIPO_A);
-		sec->MostrarWeights(TIPO_B);
+		sec->MostrarPesos(TIPO_B);
 		//sec->MostrarWeightsAcumulado(TIPO_B);
 		
 	}
