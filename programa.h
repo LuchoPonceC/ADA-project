@@ -60,8 +60,12 @@ void Programa::RellenarDatos(){
 	getline(cin,temporal);
 	sec->LlenarVectores(temporal,TIPO_B);	
 	if(TESTING){
+
 		sec->MostrarWeights(TIPO_A);
+		sec->MostrarWeightsAcumulado(TIPO_A);
 		sec->MostrarWeights(TIPO_B);
+		sec->MostrarWeightsAcumulado(TIPO_B);
+		
 	}
 }
 

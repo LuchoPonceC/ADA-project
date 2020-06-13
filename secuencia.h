@@ -22,11 +22,15 @@ private:
 	vector<int> A_vector;
 	vector<int> B_vector;
 	vector<dataType> A_weights;
+	vector<dataType> A_acumulado;
 	vector<dataType> B_weights;
+	vector<dataType> B_acumulado;
 	dataType resultado;
+	
 
 public:
 	
+	void MostrarWeightsAcumulado(int tipo);
 	void set_resultado(dataType resultado);
 	void LlenarVectores(string dato, int tipo);
 	void MostrarVector(int tipo);
@@ -45,7 +49,7 @@ public:
 	//FUNCIONES RECURSIVO:
 	dataType Recursivo_func();		
 	dataType minimo(dataType a, dataType b, dataType c);
-	dataType OPT(int i, int j, int tipo, dataType A1, dataType B1);
+	dataType OPT(int i, int j);
 
 
 
@@ -69,74 +73,38 @@ dataType Secuencias::Voraz_func(){
 
 
 dataType Secuencias::Recursivo_func(){
-			
-	return min(OPT(0,0,DIVISION,A_weights[0],0),OPT(0,0,AGRUPACION,0,B_weights[0]));
+
+	return OPT(A_weights.size()-1,B_weights.size()-1);		
 
 }		
 
-dataType Secuencias::OPT(int i, int j, int tipo, dataType A1, dataType B1){
+dataType Secuencias::OPT(int i, int j){
 
-	/*if((i>=A_weights.size() || j>=B_weights.size()) && (posicion == -1 || posicion == 1)){
+	if(i==0 and j!=0){
+		return A_weights[i]/B_acumulado[j];
+	}
+	if(i!=0 and j==0){
+		return A_acumulado[i]/B_weights[j];
+	}
+	
+	if(i==0 and j==0){
+		return A_weights[i]/B_weights[j];
+	}	
+
+	vector<dataType> valores;
+	valores.push_back(A_weights[i]/B_weights[j] + OPT(i-1,j-1));
+
+	for(int k=j-1;k>=1;k--){
+		valores.push_back(A_weights[i]/(B_acumulado[j]-B_acumulado[k-1])+OPT(i-1,k-1));
+	}
+	for(int k=i-1;k>=1;k--){
+		valores.push_back((A_acumulado[i]-A_acumulado[k-1])/B_weights[j]+OPT(k-1,j-1));
+	}
+	
+	return *std::min_element(valores.begin(), valores.end());
 		
-		return 0;
-	}*/	
-	if(i+1 == A_weights.size() && j+1 == B_weights.size() ){
-		return A_weights[i]/B_weights[j];	
-	}	
-	if(tipo == DIVISION){
-		if(i+1 == A_weights.size()){
-			if(B1!=0){
-				return 10000;
-			}
-			dataType sum_temp = 0;
-			for (int auxiliar = j; auxiliar<B_weights.size(); auxiliar++){
-				sum_temp += B_weights[auxiliar];
-			}		
-			return A1/(B1+sum_temp);
-		}
-		if(j+1 == B_weights.size()){
-			return 10000;	
-		}
-	}
-	else{
-		if(j+1 == B_weights.size()){
-			if(A1!=0){
-				return 10000;
-			}
-			dataType sum_temp = 0;
-			for (int auxiliar = i; auxiliar<A_weights.size(); auxiliar++){
-				sum_temp += A_weights[auxiliar];
-			}		
-			return (A1+sum_temp)/B1;
-		}
-		if(i+1 == A_weights.size()){
-			return 10000;
-		}
-	}
-/*	
-	if(j>=B_weights.size() && (posicion == 1)){
-		if((A_weights.size()-i)!=0) return 100000;	
-		return 0;
-	}
-	if(i>=A_weights.size() && (posicion == -1)){
-		if((B_weights.size()-j)!=0) return 100000;	
-		return 0;
-	}	
-	if(i>=A_weights.size() || j>=B_weights.size()){return 100000;}
-	*/
-	if(tipo == DIVISION){
-		return minimo(((A1/(B_weights[j]+B1))+OPT(i+1,j+1,DIVISION,A_weights[i+1],0)),
-					OPT(i,j+1,DIVISION,A1,B_weights[j]+B1),
-					((A1/(B_weights[j]+B1))+OPT(i+1,j+1,AGRUPACION,0,B_weights[j+1])));
-	}
-	else{
-		return minimo((((A_weights[i]+A1)/B1) + OPT(i+1,j+1,AGRUPACION, 0, B_weights[j+1])),
-			   		OPT(i+1,j,AGRUPACION,A1+A_weights[i],B1),
-					(((A_weights[i]+A1)/B1)+OPT(i+1,j+1,DIVISION,A_weights[i+1],0)));	
-	}
+
 }
-
-
 
 dataType Secuencias::Memoizado_func(){
 	return 0;
@@ -198,19 +166,33 @@ void Secuencias::MostrarWeights(int tipo){
 	cout<<endl;
 }
 
+void Secuencias::MostrarWeightsAcumulado(int tipo){
+	vector<dataType> *current = (tipo == TIPO_A) ? &A_acumulado : &B_acumulado;
+
+	for(int i=0;i<current->size();i++){
+		cout<<(*current)[i]<<" - ";
+	}
+
+	cout<<endl;
+
+}
+
 void Secuencias::LlenarWeights(int tipo){
 
 	bool esta_sumando = false;
 	int suma = 0;	
 	vector<dataType> *current; 
 	vector<int> *current_vector;
+	vector<dataType> *current_weights_acumulado;
 	if(tipo == TIPO_A){
 		current = &A_weights;
 		current_vector = &A_vector;
+		current_weights_acumulado = &A_acumulado;
 	}
 	else{
 		current = &B_weights;
 		current_vector = &B_vector;
+		current_weights_acumulado = &B_acumulado;
 	}
 
 	for(int i=0; i<current_vector->size(); i++){
@@ -220,11 +202,23 @@ void Secuencias::LlenarWeights(int tipo){
 			suma++;
 			if(i==current_vector->size()-1){
 				current->push_back(suma);	
+				if(current_weights_acumulado->size()==0){
+					current_weights_acumulado->push_back(suma);
+				}
+				else{
+					current_weights_acumulado->push_back(suma+((*current_weights_acumulado)[current_weights_acumulado->size()-1]));
+				}
 			}
 		}
 		else{
 			if(esta_sumando){
 				current->push_back(suma);
+				if(current_weights_acumulado->size()==0){
+					current_weights_acumulado->push_back(suma);
+				}
+				else{
+					current_weights_acumulado->push_back(suma+((*current_weights_acumulado)[current_weights_acumulado->size()-1]));
+				}
 				esta_sumando = false;
 				suma = 0;
 			}
