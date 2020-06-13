@@ -62,9 +62,9 @@ void Programa::RellenarDatos(){
 	if(TESTING){
 
 		sec->MostrarWeights(TIPO_A);
-		sec->MostrarWeightsAcumulado(TIPO_A);
+		//sec->MostrarWeightsAcumulado(TIPO_A);
 		sec->MostrarWeights(TIPO_B);
-		sec->MostrarWeightsAcumulado(TIPO_B);
+		//sec->MostrarWeightsAcumulado(TIPO_B);
 		
 	}
 }

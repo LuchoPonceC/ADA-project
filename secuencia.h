@@ -48,7 +48,6 @@ public:
 
 	//FUNCIONES RECURSIVO:
 	dataType Recursivo_func();		
-	dataType minimo(dataType a, dataType b, dataType c);
 	dataType OPT(int i, int j);
 
 
@@ -119,10 +118,6 @@ dataType Secuencias::Dinamico_func(){
 
 
 
-
-dataType Secuencias::minimo(dataType a, dataType b, dataType c){
-	return min(a,min(b,c));
-}
 
 void Secuencias::set_resultado(dataType resultado){
 	this->resultado = resultado;
