@@ -2,7 +2,7 @@
 
 #define VORAZ 0
 #define RECURSIVO 1
-#define MEMOIZADO 0
+#define MEMOIZADO 1
 #define DINAMICO 0
 
 class Programa{
