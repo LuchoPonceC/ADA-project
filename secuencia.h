@@ -119,6 +119,7 @@ dataType Secuencias::Memoizado_func() {
 	this->iniciarMatriz();
 	this->casoBase();
 	dataType result =  this->Memoizado(this->A_weights.size()-1, this->B_weights.size()-1);
+	cout << result << endl;
 	this->freeMatriz();
 	this->Matriz = nullptr;
 	return result;
@@ -148,7 +149,7 @@ dataType Secuencias::Memoizado(int i, int j) {
 }
 
 void Secuencias::iniciarMatriz() {
-	this->Matriz = new dataType*[this->B_weights.size()];
+	this->Matriz = new dataType*[this->A_weights.size()];
 	for(int i = 0; i < this->A_weights.size(); i++) {
 		this->Matriz[i] = new dataType[this->B_weights.size()];
 	}
