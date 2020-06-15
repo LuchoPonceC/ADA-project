@@ -26,16 +26,20 @@ private:
 	vector<dataType> B_weights;
 	vector<dataType> B_acumulado;
 	dataType resultado;
+	dataType** Matriz;
 	
 
 public:
 	
+	Secuencias();
 	void MostrarWeightsAcumulado(int tipo);
 	void set_resultado(dataType resultado);
 	void LlenarVectores(string dato, int tipo);
 	void MostrarVector(int tipo);
 	void LlenarWeights(int tipo);
 	void MostrarWeights(int tipo);
+	void iniciarMatriz();
+	void casoBase();
 	dataType get_resultado();
 
 
@@ -53,7 +57,8 @@ public:
 
 
 	//FUNCIONES MEMOIZADO:
-	dataType Memoizado_func();		
+	dataType Memoizado_func();	
+	dataType Memoizado(int i, int j);	
 
 
 
@@ -63,6 +68,10 @@ public:
 	
 
 };
+
+Secuencias::Secuencias() {
+	this->Matriz=nullptr;
+}
 
 
 
@@ -105,11 +114,43 @@ dataType Secuencias::OPT(int i, int j){
 
 }
 
-dataType Secuencias::Memoizado_func(){
-	return 0;
-}		
+dataType Secuencias::Memoizado_func() {
+	this->iniciarMatriz();
+	this->casoBase();
+	return this->Memoizado(this->A_weights.size()-1, this->B_weights.size()-1);
+}
 
+dataType Secuencias::Memoizado(int i, int j) {
+	if(this->Matriz[i][j] != 0) {
+		return this->Matriz[i][j];
+	}
+	vector<double> temp;
+	temp.push_back(A_weights[i]/B_weights[i]+ Memoizado(i-1, j-1));
+	for(int k = j-1; k >= 1; k--) {
+		temp.push_back((A_weights[i]/(B_acumulado[j]-B_acumulado[k-1]))+Memoizado(i-1, k-1));
+	}
+	for(int k = i-1; k >= 1; k--) {
+		temp.push_back(((A_acumulado[i]-A_acumulado[k-1])/B_weights[j])+Memoizado(k-1, j-1));
+	}
+	this->Matriz[i][j] = (*min_element(temp.begin(), temp.end()));
+	return this->Matriz[i][j];
+}
 
+void Secuencias::iniciarMatriz() {
+	this->Matriz = new dataType*[this->B_weights.size()];
+	for(int i = 0; i < this->A_weights.size(); i++) {
+		this->Matriz[i] = new dataType[this->B_weights.size()];
+	}
+}
+
+void Secuencias::casoBase() {
+	for(int i = 0; i < this->A_weights.size()-1; i++) {
+		this->Matriz[i][0] = this->A_acumulado[i]/this->B_weights[0];
+	}
+	for(int i = 1; i < this->B_weights.size()-1; i++) {
+		this->Matriz[0][i] = this->A_weights[0]/this->B_acumulado[i];
+	}
+}
 
 dataType Secuencias::Dinamico_func(){
 	return 0;
@@ -221,6 +262,3 @@ void Secuencias::LlenarWeights(int tipo){
 	}
 
 }
-
-
-
