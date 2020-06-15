@@ -32,15 +32,12 @@ private:
 public:
 	
 	Secuencias();
-	void MostrarWeightsAcumulado(int tipo);
+	void MostrarPesosAcumulado(int tipo);
 	void set_resultado(dataType resultado);
 	void LlenarVectores(string dato, int tipo);
 	void MostrarVector(int tipo);
-	void LlenarWeights(int tipo);
-	void MostrarWeights(int tipo);
-	void iniciarMatriz();
-	void casoBase();
-	void freeMatriz();
+	void LlenarPesos(int tipo);
+	void MostrarPesos(int tipo);
 	dataType get_resultado();
 
 
@@ -60,7 +57,9 @@ public:
 	//FUNCIONES MEMOIZADO:
 	dataType Memoizado_func();	
 	dataType Memoizado(int i, int j);	
-
+	void iniciarMatriz();
+	void casoBase();
+	void freeMatriz();
 
 
 
@@ -92,6 +91,7 @@ dataType Secuencias::OPT(int i, int j){
 	if(i==0 and j!=0){
 		return A_weights[i]/B_acumulado[j];
 	}
+
 	if(i!=0 and j==0){
 		return A_acumulado[i]/B_weights[j];
 	}
@@ -101,11 +101,13 @@ dataType Secuencias::OPT(int i, int j){
 	}	
 
 	vector<dataType> valores;
+
 	valores.push_back(A_weights[i]/B_weights[j] + OPT(i-1,j-1));
 
 	for(int k=j-1;k>=1;k--){
 		valores.push_back(A_weights[i]/(B_acumulado[j]-B_acumulado[k-1])+OPT(i-1,k-1));
 	}
+
 	for(int k=i-1;k>=1;k--){
 		valores.push_back((A_acumulado[i]-A_acumulado[k-1])/B_weights[j]+OPT(k-1,j-1));
 	}
@@ -186,7 +188,7 @@ void Secuencias::LlenarVectores(string dato, int tipo){
 	for(int i=0; i<dato.length(); i++){
 		current->push_back(dato[i]-48);
 	}
-	LlenarWeights(tipo);
+	LlenarPesos(tipo);
 			
 }
 
@@ -202,7 +204,7 @@ void Secuencias::MostrarVector(int tipo){
 	cout<<endl;
 }
 
-void Secuencias::MostrarWeights(int tipo){
+void Secuencias::MostrarPesos(int tipo){
 
 	vector<dataType> *current = (tipo == TIPO_A) ? &A_weights : &B_weights;
 
@@ -213,7 +215,7 @@ void Secuencias::MostrarWeights(int tipo){
 	cout<<endl;
 }
 
-void Secuencias::MostrarWeightsAcumulado(int tipo){
+void Secuencias::MostrarPesosAcumulado(int tipo){
 	vector<dataType> *current = (tipo == TIPO_A) ? &A_acumulado : &B_acumulado;
 
 	for(int i=0;i<current->size();i++){
@@ -224,7 +226,7 @@ void Secuencias::MostrarWeightsAcumulado(int tipo){
 
 }
 
-void Secuencias::LlenarWeights(int tipo){
+void Secuencias::LlenarPesos(int tipo){
 
 	bool esta_sumando = false;
 	int suma = 0;	
