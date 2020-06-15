@@ -120,7 +120,7 @@ dataType Secuencias::Memoizado_func() {
 	this->casoBase();
 	dataType result =  this->Memoizado(this->A_weights.size()-1, this->B_weights.size()-1);
 	this->freeMatriz();
-	Matriz = nullptr;
+	this->Matriz = nullptr;
 	return result;
 }
 
