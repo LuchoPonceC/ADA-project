@@ -40,6 +40,7 @@ public:
 	void MostrarWeights(int tipo);
 	void iniciarMatriz();
 	void casoBase();
+	void freeMatriz();
 	dataType get_resultado();
 
 
@@ -117,7 +118,17 @@ dataType Secuencias::OPT(int i, int j){
 dataType Secuencias::Memoizado_func() {
 	this->iniciarMatriz();
 	this->casoBase();
-	return this->Memoizado(this->A_weights.size()-1, this->B_weights.size()-1);
+	dataType result =  this->Memoizado(this->A_weights.size()-1, this->B_weights.size()-1);
+	this->freeMatriz();
+	Matriz = nullptr;
+	return result;
+}
+
+void Secuencias::freeMatriz() {
+	for(int i = 0; i < this->A_weights.size(); i++) {
+		delete [] this->Matriz[i];
+	}
+	delete [] this->Matriz;
 }
 
 dataType Secuencias::Memoizado(int i, int j) {
