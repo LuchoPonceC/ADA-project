@@ -119,7 +119,6 @@ dataType Secuencias::Memoizado_func() {
 	this->iniciarMatriz();
 	this->casoBase();
 	dataType result =  this->Memoizado(this->A_weights.size()-1, this->B_weights.size()-1);
-	cout << result << endl;
 	this->freeMatriz();
 	this->Matriz = nullptr;
 	return result;
@@ -137,7 +136,7 @@ dataType Secuencias::Memoizado(int i, int j) {
 		return this->Matriz[i][j];
 	}
 	vector<double> temp;
-	temp.push_back(A_weights[i]/B_weights[i]+ Memoizado(i-1, j-1));
+	temp.push_back(A_weights[i]/B_weights[j]+Memoizado(i-1, j-1));
 	for(int k = j-1; k >= 1; k--) {
 		temp.push_back((A_weights[i]/(B_acumulado[j]-B_acumulado[k-1]))+Memoizado(i-1, k-1));
 	}
@@ -151,15 +150,15 @@ dataType Secuencias::Memoizado(int i, int j) {
 void Secuencias::iniciarMatriz() {
 	this->Matriz = new dataType*[this->A_weights.size()];
 	for(int i = 0; i < this->A_weights.size(); i++) {
-		this->Matriz[i] = new dataType[this->B_weights.size()];
+		this->Matriz[i] = new dataType[this->B_weights.size()]{0};
 	}
 }
 
 void Secuencias::casoBase() {
-	for(int i = 0; i < this->A_weights.size()-1; i++) {
+	for(int i = 0; i < this->A_weights.size(); i++) {
 		this->Matriz[i][0] = this->A_acumulado[i]/this->B_weights[0];
 	}
-	for(int i = 1; i < this->B_weights.size()-1; i++) {
+	for(int i = 1; i < this->B_weights.size(); i++) {
 		this->Matriz[0][i] = this->A_weights[0]/this->B_acumulado[i];
 	}
 }
