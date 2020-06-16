@@ -44,6 +44,7 @@ public:
 
 	//FUNCIONES VORAZ :
 	dataType Voraz_func();		
+	dataType Voraz(int i, int j);
 
 
 
@@ -76,8 +77,54 @@ Secuencias::Secuencias() {
 
 
 dataType Secuencias::Voraz_func(){
-	return 0;
+		
+	return Voraz(0,0);
 }	
+
+dataType Secuencias::Voraz(int i, int j){
+
+	if(i==(A_weights.size()-1) && (j==B_weights.size()-1)){
+		return A_weights[i]/B_weights[j];
+	}
+
+	if(i==(A_weights.size()-1) && (j!=B_weights.size()-1)){
+		dataType auxiliar = 0;
+		do{
+			auxiliar+=B_weights[j];
+			j++;
+
+		}while(j!=B_weights.size());
+		
+		return A_weights[i]/auxiliar;
+			
+	}
+
+	if(i!=(A_weights.size()-1) && (j==B_weights.size()-1)){
+		dataType auxiliar = 0;
+		do{
+			auxiliar+=A_weights[i];
+			i++;
+		}while(i!=A_weights.size());
+
+		return auxiliar/B_weights[j];
+	}
+
+	dataType auxiliar = B_weights[j];
+
+	if(A_weights[i]/B_weights[j]>1){
+
+		while(A_weights[i]/auxiliar>1){
+			j++;
+			if(j == B_weights.size()-1){
+				j--;
+				break;
+			}
+			auxiliar+=B_weights[j];
+		}
+	}
+		
+	return A_weights[i]/auxiliar + Voraz(i+1,j+1);
+}
 
 
 dataType Secuencias::Recursivo_func(){
