@@ -1,14 +1,16 @@
 #include "secuencia.h"
+#include <time.h>
 
-#define VORAZ 0
+#define VORAZ 1
 #define RECURSIVO 1
-#define MEMOIZADO 0
+#define MEMOIZADO 1
 #define DINAMICO 0
 
 class Programa{
 private:
 	int casos;
 	Secuencias *sec;
+	clock_t t;
 public:
 	void IniciarPrograma();
 	void RellenarDatos();
@@ -31,24 +33,25 @@ void Programa::IniciarPrograma(){
 
 void Programa::Ejecutar(){
 	if(VORAZ){
+		t = clock();
 		sec->set_resultado(sec->Voraz_func());
-		cout<<"VORAZ"<<endl;
-		cout<<"El resultado es : "<<sec->get_resultado()<<endl;
+		cout<<"VORAZ: El resultado es : "<<sec->get_resultado()<<" y se demora "<<(float)(clock()-t)*1000/CLOCKS_PER_SEC<<endl;
+	}
+	
+	if(MEMOIZADO){
+		t = clock();
+		sec->set_resultado(sec->Memoizado_func());
+		cout<<"MEMOIZADO: El resultado es : "<<sec->get_resultado()<<" y se demora "<<(float)(clock()-t)*1000/CLOCKS_PER_SEC<<endl;
 	}
 	if(RECURSIVO){
+		t = clock();
 		sec->set_resultado(sec->Recursivo_func());
-		cout<<"RECURSIVO"<<endl;
-		cout<<"El resultado es : "<<sec->get_resultado()<<endl;
-	}
-	if(MEMOIZADO){
-		cout<<"MEMOIZADO"<<endl;
-		sec->set_resultado(sec->Memoizado_func());
-		cout<<"El resultado es : "<<sec->get_resultado()<<endl;
+		cout<<"RECURSIVO: El resultado es : "<<sec->get_resultado()<<" y se demora "<<(float)(clock()-t)*1000/CLOCKS_PER_SEC<<endl;
 	}
 	if(DINAMICO){
-		cout<<"RECURSIVO"<<endl;
+		t = clock();
 		sec->set_resultado(sec->Dinamico_func());
-		cout<<"El resultado es : "<<sec->get_resultado()<<endl;
+		cout<<"DINAMICO: El resultado es : "<<sec->get_resultado()<<" y se demora "<<(float)(clock()-t)/CLOCKS_PER_SEC<<endl;
 	}
 
 }
