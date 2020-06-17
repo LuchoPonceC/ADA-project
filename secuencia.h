@@ -76,6 +76,7 @@ Secuencias::Secuencias() {
 
 
 
+
 dataType Secuencias::Voraz_func(){
 		
 	return Voraz(0,0);
