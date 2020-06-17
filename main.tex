@@ -116,26 +116,26 @@ Lista de variables que seran utiles en el desarrollo del proyecto.\\
 
 \begin{algorithmic}[1]
 		\TITLE{\textsc{voraz}$(i,j)$}
-  \IF{$i$ == 1 and $j$!=1}
+  \IF{$i$ == A\_weights.size() and $j$!=B\_weights.size()}
   \RETURN A\_weights[$i$]/Sum\{B\_weights[$j:B\_weights.size()$]\}
   \ENDIF
-  \IF{$j$ == 1 and $i$!=1}
+  \IF{$j$ == B\_weights.size() and $i$!=A\_weights.size()}
   \RETURN Sum\{A\_weights[$i:A\_weights.size()$]\}/B\_weights[$j$]
   \ENDIF
-  \IF{$i$ == 1 and $j$ == 1}  
+  \IF{$i$ == A\_weights.size() and $j$ == B\_weights.size()}  
   \RETURN A\_weights[$i$]/B\_weights[$j$]
   \ENDIF
   \STATE Auxiliar = B\_weights[$j$]
-  \IF{A\_weights[$i$]/B\_weights[$j$] $> 1$}
-  \WHILE{A\_weights[$i$]/B\_weights[$j$] $ > 1$}
+  
+  \WHILE{A\_weights[$i$]/Auxiliar $ > 1$}
   \STATE $j+=1$
   \IF{$j == B\_weights.size()$}
   \STATE $j-=1$
-  \BREAK
+  \STATE \textbf{break}
   \ENDIF
   \STATE Auxiliar += B\_weights[j]
   \ENDWHILE
-  \RETURN A\_weights[$i$]/B\_weights[$j$] + voraz($i+1$,$j+1$)
+  \RETURN A\_weights[$i$]/Auxiliar + voraz($i+1$,$j+1$)
 
  \end{algorithmic}
  \subsection{Justificacion Voraz}
@@ -201,14 +201,14 @@ Funcionamiento de los dos \textit{for} en las lineas $8-11$ en el pseudocodigo \
 
  \begin{figure}[h]
 		 \centering
-		 \includegraphics[width=40em, height=12em]{ejemplo2.PNG}
+		 \includegraphics[width=40em, height=12em]{image/ejemplo2.PNG}
 		 \caption{Datos guardados por Valores en el primer for}
  \end{figure}
 
  
  \begin{figure}[h]
 		 \centering
-		 \includegraphics[width=40em, height=12em]{ejemplo3.PNG}
+		 \includegraphics[width=40em, height=12em]{image/ejemplo3.PNG}
 		 \caption{Datos guardados por Valores en el segundo for}
  \end{figure}
 
@@ -336,12 +336,12 @@ Una vez inicializado, aplicamos el algoritmo del recursivo, solo que aquí, ante
 Como podemos visualizar, el árbol recursivo tiene unos pocos niveles de más, esto es porque siempre opera todo lo que necesita, así ya lo haya calculado previamente. 
  \begin{figure}[H]
 		 \centering
-		 \includegraphics[width=33em, height=15em]{Memoizado_Arbol.png}
+		 \includegraphics[width=33em, height=15em]{image/Memoizado_Arbol.png}
 		 \caption{Árbol de recursión del algoritmo Memoizado para 2 arreglos de 4 valores}
  \end{figure}
   \begin{figure}[H]
 		 \centering
-		 \includegraphics[width=33em, height=15em]{Recursivo arbol.png}
+		 \includegraphics[width=33em, height=15em]{image/Recursivo arbol.png}
 		 \caption{Árbol de recursión del algoritmo Memoizado para 2 arreglos de 4 valores}
  \end{figure}
 \subsubsection{Complejidad Espacial}
@@ -349,7 +349,7 @@ Todos los valores se guardan en una matriz, teniendo siempre el valor óptimo pa
 Por lo que al final el tamaño de esta matriz sería MxN.
 \begin{figure}[H]
 		 \centering
-		 \includegraphics[width=20em, height=15em]{Matriz.png}
+		 \includegraphics[width=20em, height=15em]{image/Matriz.png}
 		 \caption{Complejidad de espacio}
 \end{figure}
  
